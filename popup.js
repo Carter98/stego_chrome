@@ -33,24 +33,24 @@ function handleImage(e){
             var pixelsInMsg = 0;
                 pixelsOutMsg = 0;
             for (var i = 0; i < textData.data.length; i += 4) {     // the image data object has 4 values for each pixel (RGBA)
-                if (textData.data[i+3] !== 0) {         // if blue value in text canvas is black
-                    // make sure the corresponding pixel in the image canvas has a green value ending in 7
-                    if (imgData.data[i+1]%10 == 7) {       
+                if (textData.data[i+3] !== 0) {         // if alpha value in text canvas is black
+                    // make sure the corresponding pixel in the image canvas has a red value ending in 8
+                    if (imgData.data[i]%10 == 8) {       
                         //do nothing, we're good
                     }
-                    else if (imgData.data[i+1] > 247) {     
-                        imgData.data[i+1] = 247;
+                    else if (imgData.data[i] > 248) {     
+                        imgData.data[i] = 248;
                     }
                     else {
-                        while (imgData.data[i+1] % 10 != 7) {   // increment green value until it ends in 7
-                            imgData.data[i+1]++;
+                        while (imgData.data[i] % 10 != 8) {   // increment red value until it ends in 8
+                            imgData.data[i]++;
                         }
                     }
                     pixelsInMsg++;      // keep track of how many pixels make up our message
                 }
                 else {
-                    if (imgData.data[i+1]%10 == 7) {        // make sure that pixels not making up our image don't have a green value ending in 7
-                        imgData.data[i+1]--;
+                    if (imgData.data[i]%10 == 8) {        // make sure that pixels not making up our image don't have a red value ending in 8
+                        imgData.data[i]--;
                     }
                     pixelsOutMsg++;     // keep track of how many pixels do not involve our message
                 }
@@ -77,7 +77,7 @@ function handleImage2(e){
             dctx.drawImage(img2,0,0);   // draw the image on the canvas starting at top left corner
             var decodeData = dctx.getImageData(0, 0, decodeCanvas.width, decodeCanvas.height);      // use API to get ImageData object
             for (var i = 0; i < decodeData.data.length; i += 4) {
-                if (decodeData.data[i+1] % 10 == 7) {   // if the green value ends in a 7, make the pixel black
+                if (decodeData.data[i] % 10 == 8) {   // if the red value ends in a 8, make the pixel black
                     decodeData.data[i] = 0;
                     decodeData.data[i+1] = 0;
                     decodeData.data[i+2] = 0;
@@ -102,4 +102,4 @@ function download() {
         .replace("image/png", "image/octet-stream");
     download.setAttribute("href", image);
     //download.setAttribute("download","archive.png");
-    }
+}
